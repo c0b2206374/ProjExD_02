@@ -45,7 +45,14 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-            
+        
+        if kk_rct.colliderect(bb_rct):
+            if event.type == pg.QUIT:
+                return
+        if kk_rct.colliderect(bb_rct):
+            print("Game Over")
+            return
+        
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         for k, tpl in delta.items():
@@ -55,6 +62,7 @@ def main():
         
 
         screen.blit(bg_img, [0, 0])
+
         kk_rct.move_ip(sum_mv[0], sum_mv[1])
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
