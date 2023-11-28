@@ -63,9 +63,10 @@ def main():
         screen.blit(kk_img,kk_rct)
         
         if kk_rct.colliderect(bb_rct):
-            screen.blit(bg_img, [0, 0])
-            screen.blit(end_img,kk_rct)
-            pg.display.update()
+            for i in range(100):
+                screen.blit(bg_img, [0, 0])
+                screen.blit(end_img,kk_rct)
+                pg.display.update()
             print("Game Over")
             return
 
