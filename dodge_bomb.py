@@ -15,8 +15,6 @@ delta = {
 }
 
 
-
-
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     yoko, tate = True, True
     if rct.left < 0 or WIDTH < rct.right:  
@@ -44,23 +42,13 @@ def main():
     bb_rct.centery = random.randint(0, HEIGHT)
     vx, vy = +5, 5  
 
-    zoom = {
-        (5,0):pg.transform.flip(kk_img, True, False),
-        (5,-5):pg.transform.rotozoom(kk_img, 45, 1.0),
-        (0,-5):pg.transform.rotozoom(kk_img, 90, 1.0),
-        (-5,-5):pg.transform.rotozoom(kk_img, 135, 1.0),
-        (-5,5):pg.transform.rotozoom(kk_img, 225, 1.0),
-        (0,5):pg.transform.rotozoom(kk_img, 270, 1.0),
-        (5,5):pg.transform.rotozoom(kk_img, 335, 1.0),
-        }
-
     clock = pg.time.Clock()
     tmr = 0
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-        
+            
         
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -85,8 +73,6 @@ def main():
         kk_rct.move_ip(sum_mv[0], sum_mv[1])
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
-
-        
 
 
         bb_rct.move_ip(vx, vy) 
