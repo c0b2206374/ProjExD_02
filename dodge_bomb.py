@@ -16,8 +16,10 @@ def main():
     bom = pg.Surface((20, 20))
     pg.draw.circle(bom, (255, 0, 0), (10, 10), 10)
     bom.set_colorkey((0, 0, 0))
-    Bom_Width = random.randint(0,WIDTH)
-    Bom_Height = random.randint(0,HEIGHT)
+    bom_rct = bom.get_rect()
+    bom_rct.centerx = random.randint(0, WIDTH)
+    bom_rct.centery = random.randint(0, HEIGHT)
+    vx,vy = +5,+5
 
 
 
@@ -28,14 +30,14 @@ def main():
 
         screen.blit(bg_img, [0, 0])
 
+        bom_rct.move_ip(vx,vy)
+        screen.blit(bom,bom_rct)
         
-
-        screen.blit(bom,[Bom_Width,Bom_Height])
 
         screen.blit(kk_img, [900, 400])
         pg.display.update()
         tmr += 1
-        clock.tick(10)
+        clock.tick(50)
 
 
 if __name__ == "__main__":
