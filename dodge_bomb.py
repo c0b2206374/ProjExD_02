@@ -5,12 +5,16 @@ import pygame as pg
 
 WIDTH, HEIGHT = 1600, 900
 
+zoom = [0,0]
+
 delta = { 
     pg.K_UP: (0, -5), 
     pg.K_DOWN: (0, 5),
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (5, 0)
 }
+
+
 
 
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
@@ -20,14 +24,15 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     if rct.top < 0 or HEIGHT < rct.bottom:  
         tate = False
     return yoko, tate
-
-
+                    
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
+    end_img = pg.image.load("ex02/fig/0.png")
+    end_img = pg.transform.rotozoom(end_img, 0, 3.0)
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_rct = kk_img.get_rect() 
     kk_rct.center = 900, 400 
@@ -39,6 +44,16 @@ def main():
     bb_rct.centery = random.randint(0, HEIGHT)
     vx, vy = +5, 5  
 
+    zoom = {
+        (5,0):pg.transform.flip(kk_img, True, False),
+        (5,-5):pg.transform.rotozoom(kk_img, 45, 1.0),
+        (0,-5):pg.transform.rotozoom(kk_img, 90, 1.0),
+        (-5,-5):pg.transform.rotozoom(kk_img, 135, 1.0),
+        (-5,5):pg.transform.rotozoom(kk_img, 225, 1.0),
+        (0,5):pg.transform.rotozoom(kk_img, 270, 1.0),
+        (5,5):pg.transform.rotozoom(kk_img, 335, 1.0),
+        }
+
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -46,12 +61,6 @@ def main():
             if event.type == pg.QUIT: 
                 return
         
-        if kk_rct.colliderect(bb_rct):
-            if event.type == pg.QUIT:
-                return
-        if kk_rct.colliderect(bb_rct):
-            print("Game Over")
-            return
         
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -63,10 +72,23 @@ def main():
 
         screen.blit(bg_img, [0, 0])
 
+        screen.blit(kk_img,kk_rct)
+        
+        if kk_rct.colliderect(bb_rct):
+            screen.blit(bg_img, [0, 0])
+            screen.blit(end_img,kk_rct)
+            pg.display.update()
+            print("Game Over")
+            return
+
+
         kk_rct.move_ip(sum_mv[0], sum_mv[1])
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
-        screen.blit(kk_img, kk_rct)  
+
+        
+
+
         bb_rct.move_ip(vx, vy) 
         yoko, tate = check_bound(bb_rct)
         if not yoko:  
@@ -75,6 +97,7 @@ def main():
             vy *= -1
         bb_rct.move_ip(vx, vy) 
         screen.blit(bb_img, bb_rct)
+        
         pg.display.update()
         tmr += 1
         clock.tick(50)
